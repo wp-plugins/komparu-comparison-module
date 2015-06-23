@@ -45,7 +45,7 @@ class BaseController
             set_transient('cmpmd_lu_' . $token, time(), YEAR_IN_SECONDS);
             set_transient('cmpmd_cr_' . $token, true,
                 MINUTE_IN_SECONDS * $this->plugin->settings->get_option(
-                    'check_up', 'general',
+                    'check_up', 'komparu',
                     $this->plugin->config['check_up']
                 )
             );
@@ -72,7 +72,7 @@ class BaseController
 
             set_transient('cmpmd_cr_' . $token, true,
                 MINUTE_IN_SECONDS * $this->plugin->settings->get_option(
-                    'check_up', 'general',
+                    'check_up', 'komparu',
                     $this->plugin->config['check_up']
                 )
             );

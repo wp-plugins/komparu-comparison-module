@@ -25,4 +25,10 @@ class AdminController extends BaseController
             'forms' => ob_get_clean()
         ]);
     }
+
+    public function clear($token)
+    {
+        $results = $GLOBALS['wpdb']->get_results("delete from `wp_options` where `option_name` like '%cmpmd%{$token}%'");
+        exit();
+    }
 }

@@ -26,9 +26,9 @@ class KomparuClient extends \Komparu\PhpClient\Client
 
         parent::__construct(new \GuzzleHttp\Client());
 
-        $domain   = $plugin->settings->get_option('X-Auth-Domain', 'general', false);
-        $username = $plugin->settings->get_option('username', 'general', false);
-        $password = $plugin->settings->get_option('password', 'general', false);
+        $domain   = $plugin->settings->get_option('X-Auth-Domain', 'komparu', false);
+        $username = $plugin->settings->get_option('username', 'komparu', false);
+        $password = $plugin->settings->get_option('password', 'komparu', false);
 
         if (!($domain and $username and $password)) {
             $plugin->message->error('' .

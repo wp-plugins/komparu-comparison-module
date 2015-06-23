@@ -48,7 +48,7 @@ class CSSProcessor extends BaseProcessor
                 $newpath = str_replace('komparu', 'compmodule', $path);
 
                 set_transient(
-                    'cmp_md_' . trim($newpath, '/'),
+                    'cmpmd_' . trim($newpath, '/'),
                     $this->url['scheme'] . '://' . $this->url['host'] . $path,
                     DAY_IN_SECONDS
                 );
@@ -60,7 +60,7 @@ class CSSProcessor extends BaseProcessor
                 $newpath = str_replace('komparu', 'compmodule', $path);
 
                 set_transient(
-                    'cmp_md_' . $newpath,
+                    'cmpmd_' . $newpath,
                     (preg_match('/^\/\//', $url[1]) ? ($this->url['scheme'] . ':') : '') . $url[1],
                     DAY_IN_SECONDS
                 );

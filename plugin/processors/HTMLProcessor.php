@@ -73,12 +73,10 @@ class HTMLProcessor extends BaseProcessor
 
     public static function hashed($url)
     {
-        $hashed = preg_match('/\.([^\.]{1,5})$/', $url, $m)
-            ? preg_replace('/^(.)(.)(.*)$/', '\1/\2/\3', md5($url)) . '.' . $m[1]
-            : md5($url);
+        $hashed =preg_replace('/^(.)(.)(.*)$/', '\1/\2/\3', md5($url));
 
-        if (!get_transient('cmp_md_' . $hashed)) {
-            set_transient('cmp_md_' . $hashed, $url, DAY_IN_SECONDS);
+        if (!get_transient('cmpmd_' . $hashed)) {
+            set_transient('cmpmd_' . $hashed, $url, DAY_IN_SECONDS);
         }
 
         return wp_upload_dir()['baseurl'] . '/compmodule/' . $hashed;

@@ -1,13 +1,13 @@
 <?php
 $sections = [
     [
-        'id'    => 'general',
+        'id'    => 'komparu',
         'title' => 'General Komparu API settings'
     ]
 ];
 
 $fields = [
-    'general' => [
+    'komparu' => [
         [
             'name'  => 'username',
             'label' => 'Username',

@@ -12,7 +12,7 @@ class Api extends BaseController
 
             add_action('wp_footer', function () use ($token) {
                 echo '
-                <script type="text/javascript" src="' . $this->plugin->siteUrl . '/compmodule/js/' . $token . '.js"></script>
+                <script type="text/javascript" src="' . $this->plugin->siteUrl . '/compmodule/js/' . $token . '"></script>
                 <script type="">jQuery(document).ready(function(){
                 Kmp.sessionId="'.$sid = SessionHelper::getSid($this->plugin).'";
                 });</script>';

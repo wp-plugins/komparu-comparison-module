@@ -4,7 +4,7 @@ class MediaController extends BaseController
 {
     public function get($media)
     {
-        if (!($url = get_transient('cmp_md_' . $media))) {
+        if (!($url = get_transient('cmpmd_' . $media))) {
             return;
         }
 
@@ -28,7 +28,7 @@ class MediaController extends BaseController
                 mkdir(dirname($filename), 0777, true);
             }
 
-            if (!file_put_contents($filename, file_get_contents($url))) {
+            if (!file_put_contents($filename, $response->getBody())) {
                 return;
             }
 
