@@ -30,11 +30,12 @@ class AdminController extends BaseController
     {
         $results = $GLOBALS['wpdb']->get_results("delete from `wp_options` where `option_name` like '%cmpmd%{$token}%'");
         $url     = sprintf(
-            'http://code.komparu.%s/%s/page/?__reset&format=plugin',
+            'http://code.komparu.%s/%s?__reset=&format=plugin&kmp-subid=demo',
             $this->plugin->config['target'],
             $token
         );
-        @file_get_contents($url);
+        $page = (new GuzzleHttp\Client())->get($url);
+
         exit();
     }
 }
