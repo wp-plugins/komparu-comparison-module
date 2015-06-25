@@ -29,6 +29,12 @@ class AdminController extends BaseController
     public function clear($token)
     {
         $results = $GLOBALS['wpdb']->get_results("delete from `wp_options` where `option_name` like '%cmpmd%{$token}%'");
+        $url     = sprintf(
+            'http://code.komparu.%s/%s/page/?__reset&format=plugin',
+            $this->plugin->config['target'],
+            $token
+        );
+        @file_get_contents($url);
         exit();
     }
 }
