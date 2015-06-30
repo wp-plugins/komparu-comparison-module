@@ -17,10 +17,10 @@ class CodeController extends BaseController
             $data = json_decode($json[2]);
             if (property_exists($data, 'documents')) {
                 array_walk($data->documents, function ($document) {
+                    $document->{'url'}           = HTMLProcessor::hashed($document->{'url'});
                     $document->{'company.image'} = HTMLProcessor::hashed(
                         MediaController::checkForSlashes($document->{'company.image'})
                     );
-                    $document->{'url'} = HTMLProcessor::hashed($document->{'url'});
                 });
             }
             if (property_exists($data, 'html')) {
