@@ -23,3 +23,12 @@
     background: transparent url(../gfx/refresh.png) center center no-repeat;
     vertical-align: bottom;
 }
+
+.compmodule_drop_cache.working {
+    background-image: url(../gfx/wait.gif);
+}
+
+.compmodule_drop_cache:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}

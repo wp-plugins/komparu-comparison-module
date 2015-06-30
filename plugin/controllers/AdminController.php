@@ -28,13 +28,17 @@ class AdminController extends BaseController
 
     public function clear($token)
     {
-        $results = $GLOBALS['wpdb']->get_results("delete from `wp_options` where `option_name` like '%cmpmd%{$token}%'");
-        $url     = sprintf(
-            'http://code.komparu.%s/%s?__reset=&format=plugin&kmp-subid=demo',
+        $GLOBALS['wpdb']->get_results(sprintf(
+            'delete from `%soptions` where `option_name` like "%%cmpmd%%%s%%"',
+            $GLOBALS['wpdb']->prefix,
+            $token
+        ));
+
+        (new GuzzleHttp\Client())->get(sprintf(
+            'http://code.komparu.%s/%s?__reset=&format=plugin',
             $this->plugin->config['target'],
             $token
-        );
-        $page = (new GuzzleHttp\Client())->get($url);
+        ));
 
         exit();
     }

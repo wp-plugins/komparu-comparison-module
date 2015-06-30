@@ -13,7 +13,7 @@ class CodeController extends BaseController
         $code = file_get_contents($url);
 
 
-        $code = preg_replace_callback('/(Kmp\.json_[a-z0-9]*?)\((.*?)\)\;/msi', function ($json) {
+        $code = preg_replace_callback('/(Kmp\.json_[a-z0-9]*?)\((.*)\)\;/msi', function ($json) {
             $data = json_decode($json[2]);
             if (property_exists($data, 'documents')) {
                 array_walk($data->documents, function ($document) {
