@@ -5,7 +5,7 @@
  * Plugin Name:       Komparu
  * Plugin URI:        http://komparu.com/
  * Description:       A plugin.
- * Version:           1.0.7
+ * Version:           1.0.8
  * Author:            Komparu B.V.
  * Author URI:        http://komparu.com/wordpress-plugin
  * License:           MIT

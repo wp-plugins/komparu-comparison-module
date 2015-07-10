@@ -475,41 +475,6 @@
         ]
     },
     {
-        "name": "komparu/php-client",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "git@github.com:komparu/php-client.git",
-            "reference": "3990a266c3eaf7ca846929bc3285281718b04040"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/komparu/php-client/zipball/3990a266c3eaf7ca846929bc3285281718b04040",
-            "reference": "3990a266c3eaf7ca846929bc3285281718b04040",
-            "shasum": ""
-        },
-        "require": {
-            "guzzlehttp/guzzle": "~4.2"
-        },
-        "time": "2015-05-30 20:19:37",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "Komparu\\PhpClient\\": "src/"
-            }
-        },
-        "license": [
-            "MIT"
-        ],
-        "description": "The Komparu PHP REST client",
-        "support": {
-            "source": "https://github.com/komparu/php-client/tree/master",
-            "issues": "https://github.com/komparu/php-client/issues"
-        }
-    },
-    {
         "name": "symfony/translation",
         "version": "v2.7.1",
         "version_normalized": "2.7.1.0",
@@ -620,5 +585,40 @@
             "datetime",
             "time"
         ]
+    },
+    {
+        "name": "komparu/php-client",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git@github.com:komparu/php-client.git",
+            "reference": "335ea6bab615766e7fd54d5cdfc8258831b60270"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/komparu/php-client/zipball/335ea6bab615766e7fd54d5cdfc8258831b60270",
+            "reference": "335ea6bab615766e7fd54d5cdfc8258831b60270",
+            "shasum": ""
+        },
+        "require": {
+            "guzzlehttp/guzzle": "~4.2"
+        },
+        "time": "2015-07-10 12:39:34",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "Komparu\\PhpClient\\": "src/"
+            }
+        },
+        "license": [
+            "MIT"
+        ],
+        "description": "The Komparu PHP REST client",
+        "support": {
+            "source": "https://github.com/komparu/php-client/tree/master",
+            "issues": "https://github.com/komparu/php-client/issues"
+        }
     }
 ]

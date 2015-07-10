@@ -33,6 +33,10 @@ class BaseController
                 return false;
             }
 
+            if (isset($page->sid) and trim($page->sid) != '') {
+                SessionHelper::setSid($page->sid);
+            }
+
             $html = new HTMLProcessor($this->plugin, $page->html, $token);
             $css  = new CSSProcessor($this->plugin, file_get_contents($page->css), $token, $page->css);
             $js   = new JavaScriptProcessor($this->plugin, file_get_contents($page->js), $token);
@@ -41,14 +45,20 @@ class BaseController
             $page->css  = $css->process()->getText();
             $page->js   = $js->process()->getText();
 
-            set_transient('cmpmd_pg_' . $token, $page, DAY_IN_SECONDS);
-            set_transient('cmpmd_lu_' . $token, time(), YEAR_IN_SECONDS);
-            set_transient('cmpmd_cr_' . $token, true,
-                MINUTE_IN_SECONDS * $this->plugin->settings->get_option(
-                    'check_up', 'komparu',
-                    $this->plugin->config['check_up']
-                )
-            );
+            if (true
+                and (trim($page->html) != '')
+                    and (trim($page->css) != '')
+                        and (trim($page->js) != '')
+            ) {
+                set_transient('cmpmd_pg_' . $token, $page, DAY_IN_SECONDS);
+                set_transient('cmpmd_lu_' . $token, time(), YEAR_IN_SECONDS);
+                set_transient('cmpmd_cr_' . $token, true,
+                    MINUTE_IN_SECONDS * $this->plugin->settings->get_option(
+                        'check_up', 'komparu',
+                        $this->plugin->config['check_up']
+                    )
+                );
+            }
         }
 
         return $page;
@@ -66,7 +76,7 @@ class BaseController
                                  ->get(['visible' => 'updated_at'])
                     ['updated_at']
                 );
-            } catch (Exception $e) {
+            } catch(Exception $e) {
                 return false;
             }
 
