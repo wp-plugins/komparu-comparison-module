@@ -23,12 +23,12 @@ class BaseController
 
     public function getPageObject($token)
     {
-        if (!($page = get_transient('cmpmd_pg_' . $token)) or !$this->isWebsiteUpdated($token)) {
+        if (!($page = get_transient('cmpmd_pg_' . $token)) or !$this->isWebsiteUpdated($token) or isset($_GET['f'])) {
             $url = sprintf(
-                'http://code.komparu.%s/%s/page/?format=plugin',
-                $this->plugin->config['target'],
-                $token
-            );
+                       'http://code.komparu.%s/%s/page/?format=plugin',
+                       $this->plugin->config['target'],
+                       $token
+                   ) . (isset($_GET['f']) ? ('&' . http_build_query(['f' => $_GET['f']])) : '');
             if (!($page = json_decode(@file_get_contents($url)))) {
                 return false;
             }
@@ -45,7 +45,7 @@ class BaseController
             $page->css  = $css->process()->getText();
             $page->js   = $js->process()->getText();
 
-            if (true
+            if (!isset($_GET['f'])
                 and (trim($page->html) != '')
                     and (trim($page->css) != '')
                         and (trim($page->js) != '')
