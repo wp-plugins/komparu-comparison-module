@@ -5,7 +5,7 @@
  * Plugin Name:       Komparu
  * Plugin URI:        http://komparu.com/
  * Description:       Enables easy embedding with komparu.com comparison widgets into your posts.
- * Version:           1.0.10
+ * Version:           1.0.11
  * Author:            Komparu B.V.
  * Author URI:        http://komparu.com/wordpress-plugin
  * License:           MIT
