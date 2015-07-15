@@ -58,6 +58,9 @@ class CSSProcessor extends BaseProcessor
                 // url had absolute komparu path
                 $path    = trim($parsed['path'], '/');
                 $newpath = str_replace('komparu', 'compmodule', $path);
+                $newpath = preg_replace_callback('/([^\/]+?)(\.[^.]*$|$)/', function ($m) {
+                    return substr($m[1], 0, 16) . $m[2];
+                }, $newpath);
 
                 set_transient(
                     'cmpmd_' . $newpath,

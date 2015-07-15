@@ -47,6 +47,7 @@ class Client {
      */
     public function __construct(ClientInterface $client) {
         $this->client = $client;
+        $this->client->setDefaultOption('config', ['curl' => ['CURLOPT_HTTP_VERSION' => 1]]);
         $this->resource = $this->defaultResource;
 
         // First add the server domain. This can be overridden using

@@ -42,4 +42,22 @@ class AdminController extends BaseController
 
         exit();
     }
+
+    public function delete()
+    {
+        $q = new WP_Query([
+            'guid'           => '%uploads/compmodule%',
+            'post_type'      => 'attachment',
+            'post_status'    => 'inherit',
+            'posts_per_page' => 9999,
+        ]);
+        while ($attachment = $q->next_post()) {
+            wp_delete_attachment($attachment->ID);
+            try {
+                unlink(str_replace(wp_upload_dir()['baseurl'], wp_upload_dir()['basedir'], $attachment->guid));
+            } catch(Exception $e) {
+            }
+        }
+
+    }
 }

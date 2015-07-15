@@ -18,3 +18,7 @@ $plugin->route->get([
 add_action('wp_ajax_compmodule_drop_cache', function() use ($plugin) {
     $plugin->controller->call('AdminController@clear', $_POST['args']);
 });
+
+add_action('wp_ajax_compmodule_delete_files', function() use ($plugin) {
+    $plugin->controller->call('AdminController@delete', $_POST['args']);
+});

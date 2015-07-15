@@ -18,4 +18,16 @@ if (jQuery)(function ($) {
             $(self).removeClass('working');
         });
     });
+    $(document).on('click', '.delete_files', function(e){
+        e.preventDefault();
+        var self = this;
+        $(self).addClass('working');
+        var data = {
+            action: 'compmodule_delete_files'
+        };
+        $.post(ajaxurl, data, function (response) {
+            alert('All cached files are deleted');
+            $(self).removeClass('working');
+        });
+    });
 })(jQuery);
