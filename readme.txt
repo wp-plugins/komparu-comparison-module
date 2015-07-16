@@ -3,7 +3,7 @@ Contributors: Komparu B.V.
 Tags: komparu, compare
 Requires at least: 3.8
 Tested up to: 4.2.2
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 
 Enables easy embedding with komparu.com comparison widgets into your posts.
 

@@ -73,7 +73,10 @@ class HTMLProcessor extends BaseProcessor
 
     public static function hashed($url)
     {
-        $hashed =preg_replace('/^(.)(.)(.*)$/', '\1/\2/\3', md5($url));
+        if ($url == '#') {
+            return $url;
+        }
+        $hashed = preg_replace('/^(.)(.)(.*)$/', '\1/\2/\3', md5($url)) . (preg_match('/\#$/', $url) ? '#' : '');
 
         if (!get_transient('cmpmd_' . $hashed)) {
             set_transient('cmpmd_' . $hashed, $url, DAY_IN_SECONDS);

@@ -5,7 +5,7 @@ namespace Komparu\PhpClient;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\RequestInterface;
+use GuzzleHttp\Message\RequestInterface;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Event\BeforeEvent;
 use GuzzleHttp\Event\CompleteEvent;
@@ -15,7 +15,8 @@ use Komparu\PhpClient\Exceptions\UnknownException;
 use Komparu\PhpClient\Exceptions\ValidationException;
 use Komparu\PhpClient\Exceptions\RequestTimeoutException;
 
-class Client {
+class Client
+{
 
     /**
      * @var \GuzzleHttp\ClientInterface
@@ -45,20 +46,21 @@ class Client {
     /**
      * @param ClientInterface $client
      */
-    public function __construct(ClientInterface $client) {
+    public function __construct(ClientInterface $client)
+    {
         $this->client = $client;
         $this->client->setDefaultOption('config', ['curl' => ['CURLOPT_HTTP_VERSION' => 1]]);
         $this->resource = $this->defaultResource;
 
         // First add the server domain. This can be overridden using
         // the domain() method.
-        $this->client->getEmitter()->on('before', function(BeforeEvent $event) {
+        $this->client->getEmitter()->on('before', function (BeforeEvent $event) {
             $event->getRequest()->setHeader('X-Auth-Domain', $_SERVER['SERVER_NAME']);
         });
 
         // Reset the params and resource after each request
-        $this->client->getEmitter()->on('complete', function(CompleteEvent $event) {
-            $this->params = [];
+        $this->client->getEmitter()->on('complete', function (CompleteEvent $event) {
+            $this->params   = [];
             $this->resource = $this->defaultResource;
         });
     }
@@ -67,8 +69,9 @@ class Client {
      * @param string $token
      * @return $this
      */
-    public function setToken($token) {
-        $this->client->getEmitter()->on('before', function(BeforeEvent $event) use ($token) {
+    public function setToken($token)
+    {
+        $this->client->getEmitter()->on('before', function (BeforeEvent $event) use ($token) {
             $event->getRequest()->setHeader('X-Auth-Token', $token);
         });
 
@@ -79,8 +82,9 @@ class Client {
      * @param string $domain
      * @return $this
      */
-    public function setDomain($domain) {
-        $this->client->getEmitter()->on('before', function(BeforeEvent $event) use ($domain) {
+    public function setDomain($domain)
+    {
+        $this->client->getEmitter()->on('before', function (BeforeEvent $event) use ($domain) {
             $event->getRequest()->setHeader('X-Auth-Domain', $domain);
         });
 
@@ -91,8 +95,9 @@ class Client {
      * @param string $lang
      * @return $this
      */
-    public function setLanguage($lang) {
-        $this->client->getEmitter()->on('before', function(BeforeEvent $event) use ($lang) {
+    public function setLanguage($lang)
+    {
+        $this->client->getEmitter()->on('before', function (BeforeEvent $event) use ($lang) {
             $event->getRequest()->setHeader('Accept-Language', $lang);
         });
 
@@ -103,8 +108,10 @@ class Client {
      * @param string $url
      * @return $this
      */
-    public function setUrl($url) {
+    public function setUrl($url)
+    {
         $this->url = $url;
+
         return $this;
     }
 
@@ -112,8 +119,10 @@ class Client {
      * @param string $resource
      * @return $this
      */
-    public function resource($resource) {
+    public function resource($resource)
+    {
         $this->resource = $resource;
+
         return $this;
     }
 
@@ -121,7 +130,8 @@ class Client {
      * @throws \Exception
      * @return string
      */
-    protected function getResource() {
+    protected function getResource()
+    {
         if (!$this->resource) {
             throw new \Exception('Must provide a resource');
         }
@@ -134,9 +144,11 @@ class Client {
      * @param string $password
      * @return Array
      */
-    public function authenticate($username, $password) {
-        $url = rtrim($this->url, '/') . '/auth';
+    public function authenticate($username, $password)
+    {
+        $url             = rtrim($this->url, '/') . '/auth';
         $options['body'] = compact('username', 'password');
+
         return $this->send('post', $url, $options);
     }
 
@@ -144,9 +156,11 @@ class Client {
      * @param array $query
      * @return Array
      */
-    public function get(Array $query = []) {
-        $url = rtrim($this->url, '/') . '/' . $this->getResource();
+    public function get(Array $query = [])
+    {
+        $url              = rtrim($this->url, '/') . '/' . $this->getResource();
         $options['query'] = array_replace_recursive($this->params, $query);
+
         return $this->send('get', $url, $options);
     }
 
@@ -155,9 +169,11 @@ class Client {
      * @param array $query
      * @return Array
      */
-    public function show($id, Array $query = []) {
-        $url = rtrim($this->url, '/') . '/' . $this->getResource() . '/' . $id;
+    public function show($id, Array $query = [])
+    {
+        $url              = rtrim($this->url, '/') . '/' . $this->getResource() . '/' . $id;
         $options['query'] = array_replace_recursive($this->params, $query);
+
         return $this->send('get', $url, $options);
     }
 
@@ -165,9 +181,11 @@ class Client {
      * @param Array $body
      * @return Array
      */
-    public function store(Array $body = []) {
-        $url = rtrim($this->url, '/') . '/' . $this->getResource();
+    public function store(Array $body = [])
+    {
+        $url             = rtrim($this->url, '/') . '/' . $this->getResource();
         $options['body'] = array_replace_recursive($this->params, $body);
+
         return $this->send('post', $url, $options);
     }
 
@@ -176,9 +194,11 @@ class Client {
      * @param Array $body
      * @return Array
      */
-    public function update($id, Array $body = []) {
-        $url = rtrim($this->url, '/') . '/' . $this->getResource() . '/' . $id;
+    public function update($id, Array $body = [])
+    {
+        $url             = rtrim($this->url, '/') . '/' . $this->getResource() . '/' . $id;
         $options['body'] = array_replace_recursive($this->params, $body);
+
         return $this->send('put', $url, $options);
     }
 
@@ -187,17 +207,21 @@ class Client {
      * @param Array $body
      * @return Array
      */
-    public function delete($id, Array $body = []) {
-        $url = rtrim($this->url, '/') . '/' . $this->getResource() . '/' . $id;
+    public function delete($id, Array $body = [])
+    {
+        $url             = rtrim($this->url, '/') . '/' . $this->getResource() . '/' . $id;
         $options['body'] = array_replace_recursive($this->params, $body);
+
         return $this->send('delete', $url, $options);
     }
 
     /**
      * @return Array
      */
-    public function options() {
+    public function options()
+    {
         $url = rtrim($this->url, '/') . '/' . $this->getResource();
+
         return $this->send('options', $url);
     }
 
@@ -205,10 +229,12 @@ class Client {
      * @param array $bulk
      * @return Array
      */
-    public function bulk(Array $bulk) {
-        $url = rtrim($this->url, '/') . '/' . $this->getResource() . '/_bulk';
-        $body['bulk'] = $bulk;
+    public function bulk(Array $bulk)
+    {
+        $url             = rtrim($this->url, '/') . '/' . $this->getResource() . '/_bulk';
+        $body['bulk']    = $bulk;
         $options['body'] = array_replace_recursive($this->params, $body);
+
         return $this->send('post', $url, $options);
     }
 
@@ -218,30 +244,30 @@ class Client {
      * @param $options
      * @return Array
      */
-    public function send($method, $url, $options = []) {
+    public function send($method, $url, $options = [])
+    {
         try {
-            $request = $this->client->createRequest($method, $url, $options);
+            $request  = $this->client->createRequest($method, $url, $options);
             $response = $this->client->send($request);
-            return $this->handleResponse($response);
-        } catch (ServerException $e) {
-            return $this->handleResponse($e->getResponse());
-        } catch (ClientException $e) {
-            return $this->handleResponse($e->getResponse());
+
+            return $this->handleResponse($response, $request);
+        } catch(ServerException $e) {
+            return $this->handleResponse($e->getResponse(), $request);
+        } catch(ClientException $e) {
+            return $this->handleResponse($e->getResponse(), $request);
         }
     }
 
     /**
      * @param ResponseInterface $response
+     * @param RequestInterface $request
      * @return Array
-     * @throws Exception
-     * @throws UnauthorizedHttpException
      * @throws NotFoundException
      * @throws RequestTimeoutException
      * @throws UnauthorizedException
-     * @throws UnknownException
      * @throws ValidationException
      */
-    protected function handleResponse(ResponseInterface $response)
+    protected function handleResponse(ResponseInterface $response, RequestInterface $request)
     {
         switch ($response->getStatusCode()) {
 
@@ -255,10 +281,11 @@ class Client {
                 throw new RequestTimeoutException($response);
 
             case 422:
-                try{
+                try {
                     $data = $response->json();
-                } catch (\RuntimeException $e) {
-                    $this->throwError($response);
+                } catch(\RuntimeException $e) {
+                    $this->throwError($response, $request);
+                    break;
                 }
                 $e = new ValidationException($data['message']);
                 $e->setErrors($data['errors']);
@@ -266,16 +293,17 @@ class Client {
 
             case 200:
 
-                try{
+                try {
                     $data = $response->json();
-                } catch (\RuntimeException $e) {
-                    $this->throwError($response);
+                } catch(\RuntimeException $e) {
+                    $this->throwError($response, $request);
+
+                    return false;
                 }
 
                 if (isset($data['code']) && is_numeric($data['code']) && isset($data['message'])) {
 
-                    switch ($data['code'])
-                    {
+                    switch ($data['code']) {
                         case 401:
                             throw new UnauthorizedException($response);
 
@@ -291,30 +319,51 @@ class Client {
                             throw $e;
 
                         default:
-                            $this->throwError($response);
+                            $this->throwError($response, $request);
                     }
                 }
 
                 return $response->json();
 
             case 204:
-                try{
+                try {
                     $data = $response->json();
-                } catch (\RuntimeException $e) {
-                    $this->throwError($response);
+                } catch(\RuntimeException $e) {
+                    $this->throwError($response, $request);
+                    break;
                 }
+
                 return $data;
 
             default:
-                $this->throwError($response);
+                $this->throwError($response, $request);
+
                 return false;
         }
+
+        return false; // this will never happen, but let's return something anyway
     }
 
-    protected function throwError($response)
+    /**
+     * @param ResponseInterface $response
+     * @param RequestInterface $request
+     */
+    protected function throwError(ResponseInterface $response, RequestInterface $request)
     {
-        if (isset($_SERVER['HTTP_HOST']) && ( strpos($_SERVER['HTTP_HOST'], '.komparu.dev') !== FALSE || strpos($_SERVER['HTTP_HOST'], '.komparu.test') !== FALSE) ) {
-            file_put_contents('errorapi.html', $response->getBody());
+        $data    = $response->json();
+        $message = sprintf(
+            "%s %s\n%s\n\n%s %s\n%s",
+            $request->getMethod(),
+            $response->getEffectiveUrl(),
+            $request->getBody(),
+            $data['code'],
+            $data['message'],
+            $data['description']
+        );
+        if (isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'],
+                    '.komparu.dev') !== false || strpos($_SERVER['HTTP_HOST'], '.komparu.test') !== false)
+        ) {
+            file_put_contents('errorapi.html', '<pre>' . $message . '</pre>');
             echo "<html><head><title>" . $response->getReasonPhrase() . "</title><link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>"
                  . "<style>*{font-family:'Open Sans', Arial;color:#333;}#trace{padding:1em;border-radius:5px;background:#fff;opacity:.9;}#trace p{line-height:1.5em;padding:.5em 1em;margin:0;}"
                  . "#trace p:nth-child(6){background:yellow;}}</style></head><body style='margin:0;background:red;height:100%;'><div style='padding:1em 3em;'>";
@@ -324,10 +373,8 @@ class Client {
             echo "<div id='trace'><p>" . str_replace("\n", "</p><p>", $exception->getTraceAsString()) . "</p></div>";
             echo "</div></body></html>";
             exit;
-        }
-        elseif (class_exists('\Log'))
-        {
-            \Log::error($response->getBody());
+        } elseif (class_exists('\Log')) {
+            \Log::error($message);
         }
     }
 
@@ -337,8 +384,10 @@ class Client {
      * @return $this
      * @internal param mixed $param
      */
-    public function __call($method, $params) {
+    public function __call($method, $params)
+    {
         $this->params[$method] = current($params);
+
         return $this;
     }
 
