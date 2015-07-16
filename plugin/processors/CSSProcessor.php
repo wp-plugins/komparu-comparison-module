@@ -45,7 +45,7 @@ class CSSProcessor extends BaseProcessor
                     '#\.\.\/|([^\/]+?\/)\.\.\/#', '',
                     dirname($this->url['path']) . '/' . $parsed['path']
                 );
-                $newpath = str_replace('komparu', 'compmodule', $path);
+                $newpath = $this->path($path);
 
                 set_transient(
                     'cmpmd_' . trim($newpath, '/'),
@@ -57,10 +57,7 @@ class CSSProcessor extends BaseProcessor
             } elseif (stristr($parsed['host'], 'komparu')) {
                 // url had absolute komparu path
                 $path    = trim($parsed['path'], '/');
-                $newpath = str_replace('komparu', 'compmodule', $path);
-                $newpath = preg_replace_callback('/([^\/]+?)\.([^.]*$|$)/', function ($m) {
-                    return substr($m[1], 0, 16) . '_' . $m[2];
-                }, $newpath);
+                $newpath = $this->path($path);
 
                 set_transient(
                     'cmpmd_' . $newpath,
@@ -76,8 +73,19 @@ class CSSProcessor extends BaseProcessor
             return 'url("' . $url . '")';
         }, $this->text);
 
-        $this->text = preg_replace('/([\#\.])komparu/', '\1compmodule', $this->text);
+        $this->text = preg_replace_callback('/\s*}.*?\s*{/', function ($m) {
+            return str_replace('komparu', 'compmodule', $m[0]);
+        }, $this->text);
 
         return $this;
+    }
+
+    private function path($path)
+    {
+        return preg_replace_callback('/([^\/]+?)\.([^.]*$|$)/', function ($m) {
+            return str_replace('komparu', 'compmodule', substr($m[1], 0, 16))
+                   . ($this->plugin->config['nginx'] ? '_' : '.')
+                   . $m[2];
+        }, $path);
     }
 }

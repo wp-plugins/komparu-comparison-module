@@ -26,7 +26,7 @@ class AdminController extends BaseController
         ]);
     }
 
-    public function clear($token)
+    public function clear($token = '')
     {
         $GLOBALS['wpdb']->get_results(sprintf(
             'delete from `%soptions` where `option_name` like "%%cmpmd%%%s%%"',
@@ -34,13 +34,13 @@ class AdminController extends BaseController
             $token
         ));
 
-        (new GuzzleHttp\Client())->get(sprintf(
-            'http://code.komparu.%s/%s?__reset=&format=plugin',
-            $this->plugin->config['target'],
-            $token
-        ));
-
-        exit();
+        if ($token != '') {
+            (new GuzzleHttp\Client())->get(sprintf(
+                'http://code.komparu.%s/%s?__reset=&format=plugin',
+                $this->plugin->config['target'],
+                $token
+            ));
+        }
     }
 
     public function delete()

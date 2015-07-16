@@ -36,7 +36,7 @@ class HTMLProcessor extends BaseProcessor
             /** @var DOMNode $img */
             if ($src = $img->attributes->getNamedItem('src')) {
                 /** @var DOMAttr $src */
-                $src->value = self::hashed($src->value);
+                $src->value = self::hashed($src->value, $this->plugin);
             }
         }
 
@@ -54,7 +54,7 @@ class HTMLProcessor extends BaseProcessor
             /** @var DOMNode $img */
             if ($src = $a->attributes->getNamedItem('href')) {
                 /** @var DOMAttr $src */
-                $src->value = self::hashed($src->value);
+                $src->value = self::hashed($src->value, $this->plugin);
             }
         }
 
@@ -71,12 +71,13 @@ class HTMLProcessor extends BaseProcessor
         return $this;
     }
 
-    public static function hashed($url)
+    public static function hashed($url, $plugin)
     {
         if ($url == '#') {
             return $url;
         }
-        $hashed = preg_replace('/^(.)(.)(.*)$/', '\1/\2/\3', md5($url)) . (preg_match('/\#$/', $url) ? '#' : '');
+        $hashed = preg_replace('/^(.)(.)(.{10}).*$/', '\1/\2/\3', md5($url)) .
+                  (preg_match('/\.([^\/\.]{1,5})$/', $url, $m) ? (($plugin->config['nginx'] ? '_' : '.') . $m[1]) : '');
 
         if (!get_transient('cmpmd_' . $hashed)) {
             set_transient('cmpmd_' . $hashed, $url, DAY_IN_SECONDS);
