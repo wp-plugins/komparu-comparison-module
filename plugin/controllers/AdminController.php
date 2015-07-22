@@ -45,12 +45,16 @@ class AdminController extends BaseController
 
     public function delete()
     {
+        add_filter('posts_where', function ($where) {
+            return $where . ' AND (' . $GLOBALS['wpdb']->posts . '.guid LIKE "%uploads/compmodule%") ';
+        }, 10, 2);
+
         $q = new WP_Query([
-            'guid'           => '%uploads/compmodule%',
             'post_type'      => 'attachment',
             'post_status'    => 'inherit',
             'posts_per_page' => 9999,
         ]);
+
         while ($attachment = $q->next_post()) {
             wp_delete_attachment($attachment->ID);
             try {
