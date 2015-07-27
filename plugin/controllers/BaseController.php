@@ -37,6 +37,9 @@ class BaseController
                 SessionHelper::setSid($page->sid);
             }
 
+            $page->css = preg_replace('/^\/\//', 'http://', $page->css);
+            $page->js  = preg_replace('/^\/\//', 'http://', $page->js);
+
             $html = new HTMLProcessor($this->plugin, $page->html, $token);
             $css  = new CSSProcessor($this->plugin, file_get_contents($page->css), $token, $page->css);
             $js   = new JavaScriptProcessor($this->plugin, file_get_contents($page->js), $token);
