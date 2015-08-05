@@ -64,8 +64,10 @@ class AdminController extends BaseController
 
     protected function clearCache($token = '')
     {
-        $GLOBALS['wpdb']->get_results(sprintf(
-            'delete from `%soptions` where `option_name` like "%%cmpmd%%%s%%"',
+        /** @var wpdb $wpdb */
+        $wpdb = $GLOBALS['wpdb'];
+        $wpdb->get_results(sprintf(
+            'DELETE FROM `%soptions` WHERE `option_name` LIKE "%%cmpmd%%%s%%"',
             $GLOBALS['wpdb']->prefix,
             $token
         ));
