@@ -15,8 +15,8 @@ class JavaScriptProcessor extends BaseProcessor
 
     protected function code()
     {
-        $this->text = str_replace(
-            'http://code.komparu.' . $this->plugin->config['target'] ,
+        $this->text = preg_replace(
+            '/(http\:\/\/|https\:\/\/|\/\/)code\.komparu\.' . $this->plugin->config['target'].'/i',
             $this->plugin->siteUrl . '/compmodule/code',
             $this->text
         );

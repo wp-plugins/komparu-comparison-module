@@ -28,11 +28,7 @@ class AdminController extends BaseController
 
     public function clear($token = '')
     {
-        $GLOBALS['wpdb']->get_results(sprintf(
-            'delete from `%soptions` where `option_name` like "%%cmpmd%%%s%%"',
-            $GLOBALS['wpdb']->prefix,
-            $token
-        ));
+        $this->clearCache($token);
 
         if ($token != '') {
             (new GuzzleHttp\Client())->get(sprintf(
@@ -63,5 +59,17 @@ class AdminController extends BaseController
             }
         }
 
+        $this->clearCache();
+    }
+
+    protected function clearCache($token = '')
+    {
+        /** @var wpdb $wpdb */
+        $wpdb = $GLOBALS['wpdb'];
+        $wpdb->get_results(sprintf(
+            'DELETE FROM `%soptions` WHERE `option_name` LIKE "%%cmpmd%%%s%%"',
+            $GLOBALS['wpdb']->prefix,
+            $token
+        ));
     }
 }

@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/illuminate/support/Illuminate/Support/helpers.php',
     $vendorDir . '/guzzlehttp/streams/src/functions.php',
     $vendorDir . '/guzzlehttp/guzzle/src/functions.php',
 );
